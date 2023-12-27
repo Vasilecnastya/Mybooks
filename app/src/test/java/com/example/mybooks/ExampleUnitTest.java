@@ -1,4 +1,4 @@
-package com.example.files;
+package com.example.mybooks;
 
 import org.junit.Test;
 

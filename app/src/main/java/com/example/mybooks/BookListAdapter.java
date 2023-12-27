@@ -1,8 +1,8 @@
-package com.example.files;
+package com.example.mybooks;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfRenderer;
-import android.media.Image;
 import android.os.ParcelFileDescriptor;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,36 +14,34 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class ReadingListAdapter extends RecyclerView.Adapter<ReadingListAdapter.Viewholder> {
+public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.Viewholder> {
 
     private List<File> files ;
-    private Listeners listeners ;
+    private Listener listener ;
 
-    interface Listeners{
+    interface Listener{
         void oneClick(int position) ;
     }
 
-    public void setListeners(Listeners listeners){
-        this.listeners =  listeners;
+    public void setListener(Listener listener){
+        this.listener = listener;
     }
 
-    public ReadingListAdapter(List<File> files){
+    public BookListAdapter(List<File> files){
         this.files = files ;
     }
 
     @NonNull
     @Override
-    public ReadingListAdapter.Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.book_recycler_items ,parent , false) ;
-        return new ReadingListAdapter.Viewholder(view);
+        return new Viewholder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ReadingListAdapter.Viewholder holder, final int position) {
+    public void onBindViewHolder(@NonNull Viewholder holder, @SuppressLint("RecyclerView") final int position) {
         File pdffile = files.get(position);
         String book = pdffile.getName();
         Bitmap bitmap = pdf_to_Bitmap(pdffile) ;
@@ -52,20 +50,11 @@ public class ReadingListAdapter extends RecyclerView.Adapter<ReadingListAdapter.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(listeners!=null) {
-                    listeners.oneClick(position);
+                if(listener!=null) {
+                    listener.oneClick(position);
                 }
             }
         });
-        /**
-         holder.Star.setOnClickListener();
-         Code for star / Favorites .
-         **/
-    }
-
-    public void Remove(File file){
-        files.remove(file) ;
-        notifyDataSetChanged();
     }
 
     private Bitmap pdf_to_Bitmap(File pdfFile){
@@ -92,22 +81,17 @@ public class ReadingListAdapter extends RecyclerView.Adapter<ReadingListAdapter.
 
     @Override
     public int getItemCount() {
-
-        if(files!=null){
-            return files.size() ;
-        }
-        return 0 ;
+        return files.size();
     }
 
     class Viewholder extends RecyclerView.ViewHolder{
+
         TextView title ;
         ImageView image ;
-        ImageView Star  ;
         public Viewholder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.book_title);
             image = itemView.findViewById(R.id.book_image);
-            Star = itemView.findViewById(R.id.star);
         }
     }
 }

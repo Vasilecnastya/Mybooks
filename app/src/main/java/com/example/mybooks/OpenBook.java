@@ -1,11 +1,10 @@
-package com.example.files;
+package com.example.mybooks;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.github.barteksc.pdfviewer.PDFView;
 import com.shockwave.pdfium.PdfPasswordException;
